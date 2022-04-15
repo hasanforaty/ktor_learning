@@ -5,7 +5,7 @@ import io.ktor.server.netty.*
 import com.foraty.hasan.plugins.*
 
 fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+    embeddedServer(Netty, port = 8080) {
         configureRouting()
         configureSerialization()
     }.start(wait = true)
