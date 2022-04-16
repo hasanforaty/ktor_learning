@@ -10,7 +10,7 @@ import io.ktor.server.routing.*
 
 
 fun Route.customerRoute(){
-    route("customer/"){
+    route("customer"){
         get {
             if (customerStorage.isNotEmpty()){
                 call.respond(customerStorage)
