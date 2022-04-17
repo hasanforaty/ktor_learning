@@ -36,12 +36,12 @@ fun Route.webSocketRoute(){
                 send("You are now Connected , online:${connections.size}")
                 for (frame in incoming){
                     frame as? Frame.Text ?: continue
-                    val receivedText= frame.readText()
+                    val receivedText:String= frame.readText()
                     val sendingText = "[${username}] : $receivedText"
                     val history = histories.find { it.user==thisUser } ?: History(thisUser)
                     history.history.add(receivedText)
                     histories.add(history)
-                    if (receivedText=="""/history"""){
+                    if (receivedText.contains("""/history""")){
                         history.history.forEach {
                             this.send(it)
                         }
