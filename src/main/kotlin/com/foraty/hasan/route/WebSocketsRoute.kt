@@ -34,6 +34,7 @@ fun Route.webSocketRoute(){
             connections[thisUser] = this
             try {
                 send("You are now Connected , online:${connections.size}")
+                var isWhisper = Pair<Boolean,User?>(false,null)
                 for (frame in incoming){
                     frame as? Frame.Text ?: continue
                     val receivedText:String= frame.readText()
@@ -45,9 +46,26 @@ fun Route.webSocketRoute(){
                         history.history.forEach {
                             this.send(it)
                         }
-                    }else{
-                        connections.forEach {
-                            it.value.send(sendingText)
+                    }else if (receivedText.contains("""/whisper""")){
+                        val whisperUserName  = receivedText.removePrefix("/whisper").trim()
+                        if (whisperUserName!=thisUser.userName){
+                            val whisperUser = users.find {
+                                it.userName == whisperUserName
+                            } ?:break
+                            isWhisper = Pair(true,whisperUser)
+                        }else send("you can't whisper to your self")
+                    }else {
+                        if (isWhisper.first){
+                            val user = isWhisper.second?: break
+                            connections[user]?.let {
+                                it.send("w:$sendingText")
+
+                            }
+                            connections[thisUser]?.send("to ${user.userName} : $receivedText")
+                        }else{
+                            connections.forEach {
+                                it.value.send(sendingText)
+                            }
                         }
                     }
                 }
