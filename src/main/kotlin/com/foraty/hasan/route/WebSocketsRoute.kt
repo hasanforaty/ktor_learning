@@ -34,6 +34,9 @@ fun Route.webSocketRoute(){
             connections[thisUser] = this
             try {
                 send("You are now Connected , online:${connections.size}")
+                connections.forEach {
+                    it.value.send("${thisUser.userName} added to chat")
+                }
                 var isWhisper = Pair<Boolean,User?>(false,null)
                 for (frame in incoming){
                     frame as? Frame.Text ?: continue
@@ -54,6 +57,9 @@ fun Route.webSocketRoute(){
                             } ?:break
                             isWhisper = Pair(true,whisperUser)
                         }else send("you can't whisper to your self")
+                    }else if (receivedText.contains("""/All""")){
+                        this.send("message show in Glob")
+                        isWhisper = Pair(false,null)
                     }else {
                         if (isWhisper.first){
                             val user = isWhisper.second?: break
