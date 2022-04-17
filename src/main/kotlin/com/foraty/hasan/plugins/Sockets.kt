@@ -13,16 +13,6 @@ fun Application.configureSockets(){
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
-    routing {
-        webSocket("/chat"){
-            send("you are connected")
-            for (frame in incoming){
-                frame as? Frame.Text ?: continue
-                val receiveText = frame.readText()
-                send("you said $receiveText")
-            }
-        }
-    }
 
 
 }
