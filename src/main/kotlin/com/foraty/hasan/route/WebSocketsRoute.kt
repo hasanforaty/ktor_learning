@@ -60,7 +60,10 @@ fun Route.webSocketRoute(){
                     }else if (receivedText.contains("""/All""")){
                         this.send("message show in Glob")
                         isWhisper = Pair(false,null)
-                    }else {
+                    }else if(receivedText.contains("""/command""")){
+                        this.send(commandMessage)
+                    }
+                    else {
                         if (isWhisper.first){
                             val user = isWhisper.second?: break
                             connections[user]?.let {
@@ -86,3 +89,10 @@ fun Route.webSocketRoute(){
 
     }
 }
+
+val commandMessage = """
+    /whisper [useName] : start a whisper to userName
+    /All : back to Glob
+    /history : show list of sent message
+    /command : show list of command
+""".trimIndent()
