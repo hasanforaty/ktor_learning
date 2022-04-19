@@ -60,9 +60,4 @@ fun Route.articleRoute(){
         }
 
     }
-    route("api"){
-        get {
-            call.respond(articles)
-        }
-    }
 }
