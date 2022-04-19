@@ -1,5 +1,6 @@
 package com.foraty.hasan.plugins
 
+import com.foraty.hasan.route.articleRoute
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,5 +14,6 @@ fun Application.configureRouting() {
        static("/static"){
            resources("files")
        }
+        articleRoute()
     }
 }

@@ -6,8 +6,8 @@ import com.foraty.hasan.plugins.*
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
-        configureRouting()
         configureSerialization()
         configureTemplating()
+        configureRouting()
     }.start(wait = true)
 }
