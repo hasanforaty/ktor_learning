@@ -8,14 +8,16 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
+    private lateinit var database:Database
     fun init(){
         val driverClassName = "org.h2.Driver"
         val jdbcURL = "jdbc:h2:file:./build/db"
-        val database = Database.connect(jdbcURL, driverClassName)
+        database = Database.connect(jdbcURL, driverClassName)
         transaction (database){
             SchemaUtils.create(Articles)
         }
     }
     suspend fun <T> dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO) { block() }
+        newSuspendedTransaction(Dispatchers.IO, db = database ) { block() }
 }
+
